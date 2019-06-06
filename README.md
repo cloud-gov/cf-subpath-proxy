@@ -9,7 +9,7 @@ Running [R Shiny](https://shiny.rstudio.com/) apps on [Cloud Foundry](https://ww
 
 If you provide a `uiPattern` parameter matching the path when you set up the app object in your R code, you'll see the app respond, but request JS and CSS assets from a `/shared` path. If you don't have another Shiny app at the root of the same hostname, those assets won't be found, and the app will appear broken.
 
-In 12-factor land we don't want our app to care about how requests are routed to it, and we don't want apps to request JS and CSS from each other. We've referenced [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy) and to configure an `nginx-buildpack` proxy app here that provides these attributes.
+In 12-factor land we don't want our app to care about how requests are routed to it, and we don't want apps to request JS and CSS from each other. In this example, we configure an `nginx-buildpack` proxy app that provides these attributes, referencing [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy).
 
 ## Using the proxy
 1. Map the misbehaving app to a route on an `.internal` domain, eg `<appname>.apps.internal`.
