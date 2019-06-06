@@ -1,11 +1,13 @@
 ---
 applications:
-- name: subpath-strip-proxy
+- name: subpath-proxy
   memory: 64M
   instances: 1
   health-check-type: http
   health-check-http-endpoint: /nginx_status
-  
+  buildpacks:
+    - nginx_buildpack
+    
   # The NAMESERVER entered here is just to ensure that the nginx buildpack will successfully stage.
   # The code in .profile will overwrite the environment variable at application startup to ensure
   # that even apps on the "apps.internal" domain can be resolved.
