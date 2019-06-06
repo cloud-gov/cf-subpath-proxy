@@ -5,10 +5,11 @@
 Sometimes applications aren't well-behaved when Cloud Foundry serves them from a route with a `--path`. One way to handle this situation is to use a proxy app as a front-end which strips the path from the request before it reaches the problem app. The misbehaving app will see all requests arriving via `/` instead of a subpath, avoiding broken behavior. You can use the [NGINX buildpack](https://docs.cloudfoundry.org/buildpacks/nginx/index.html) to implement such a proxy application, as demonstrated here.
 
 ### That's too vague; what's an example of an app that misbehaves on a route with a path?
-Running [R Shiny](https://shiny.rstudio.com/) apps on [Cloud Foundry](https://www.cloudfoundry.org/) works great thanks to the [R Buildpack](https://docs.cloudfoundry.org/buildpacks/r/index.html)... until you try to map your R Shiny app a route to with a `--path`! If you do that you're likely to see requests for JS and CSS resources from a `/shared` path that probably doesn't map to your app (or another Shiny app), and your app will appear broken. You may be tempted to try tweaking R code and route config, but that way lies madness, and in 12-factor land we don't want our app to care about how requests are routed to it.
+Running [R Shiny](https://shiny.rstudio.com/) apps on [Cloud Foundry](https://www.cloudfoundry.org/) works great thanks to the [R Buildpack](https://docs.cloudfoundry.org/buildpacks/r/index.html)... until you try to map your R Shiny app a route to with a `--path`! Then you'll see a `404 Not Found` message from the Shiny app. 
 
-We've referenced [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy) for the content of the `nginx.conf` file in this repo.
+If you provide a `uiPattern` parameter matching the path when you set up the app object in your R code, you'll see the app respond, but request JS and CSS assets from a `/shared` path. If you don't have another Shiny app at the root of the same hostname, those assets won't be found, and the app will appear broken.
 
+In 12-factor land we don't want our app to care about how requests are routed to it, and we don't want apps to request JS and CSS from each other. We've referenced [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy) and to configure an `nginx-buildpack` proxy app here that provides these attributes.
 
 ## Using the proxy
 1. Map the misbehaving app to a route on an `.internal` domain, eg `<appname>.apps.internal`.
