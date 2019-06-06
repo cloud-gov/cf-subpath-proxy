@@ -15,7 +15,7 @@ The configuration for NGINX is in the `nginx.conf` file in this repo. We've refe
 1. Clone this repo and copy `manifest.yml-dist` to `manifest.yml`.
 1. Edit `manifest.yml` to set the application name and hostname+domain path.
 1. Run `cf push`.
-1. If the misbehaving app on is a `.internal` domain, add a network policy enabling the proxy to reach it.
+1. If the misbehaving app on is a `.internal` domain, add a network policy enabling the proxy to reach it. For example:
   `cf add-network-policy subpath-strip-proxy --destination-app <appname>`
 
 --- 
