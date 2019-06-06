@@ -2,9 +2,9 @@
 
 ## Why this project
 
-Sometimes applications aren't well-behaved when Cloud Foundry serves them from a route with a `--path`. Using a proxy as the front-end that strips the path from the request before it reaches the problem app is a cleaner way to handle this situation. The misbehaving app will see all requests arriving via `/` instead of a subpath, avoiding broken behavior. We can use the [NGINX buildpack](https://docs.cloudfoundry.org/buildpacks/nginx/index.html) to implement such a proxy application, as demonstrated here.
+Sometimes applications aren't well-behaved when Cloud Foundry serves them from a route with a `--path`. One way to handle this situation is to use a proxy app as a front-end which strips the path from the request before it reaches the problem app. The misbehaving app will see all requests arriving via `/` instead of a subpath, avoiding broken behavior. You can use the [NGINX buildpack](https://docs.cloudfoundry.org/buildpacks/nginx/index.html) to implement such a proxy application, as demonstrated here.
 
-For example, running [R Shiny](https://shiny.rstudio.com/) apps on [Cloud Foundry](https://www.cloudfoundry.org/) works great thanks to the [R Buildpack](https://docs.cloudfoundry.org/buildpacks/r/index.html)... until you try to map your R Shiny app a route to with a `--path`! If you do that you're likely to see requests for JS and CSS resources from a `/shared` path that doesn't map to your app, and your app will appear broken. You may be tempted to try tweaking R code and route config, but that way lies madness. Hence, this example.
+For example, running [R Shiny](https://shiny.rstudio.com/) apps on [Cloud Foundry](https://www.cloudfoundry.org/) works great thanks to the [R Buildpack](https://docs.cloudfoundry.org/buildpacks/r/index.html)... until you try to map your R Shiny app a route to with a `--path`! If you do that you're likely to see requests for JS and CSS resources from a `/shared` path that doesn't map to your app, and your app will appear broken. (You may be tempted to try tweaking R code and route config, but that way lies madness. Hence, this example.)
 
 
 ## Preparing to use the proxy
