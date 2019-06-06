@@ -11,7 +11,7 @@ We've referenced [an example from the Shiny documentation](https://support.rstud
 
 
 ## Using the proxy
-1. Map the misbehaving app to a route on the `.internal` domain, eg `<appname>.internal`.
+1. Map the misbehaving app to a route on an `.internal` domain, eg `<appname>.apps.internal`.
 1. Clone this repo and copy `manifest.yml-dist` to `manifest.yml`.
 1. Edit `manifest.yml` to set the application name and hostname+domain path.
 1. Run `cf push`.
