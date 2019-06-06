@@ -12,10 +12,11 @@ For example, running [R Shiny](https://shiny.rstudio.com/) apps on [Cloud Foundr
 The configuration for NGINX is in the `nginx.conf` file in this repo. We've referenced [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy) for the content.
 
 ### Pushing to Cloud Foundry
+1. Map the misbehaving app to a route on the `.internal` domain.
 1. Clone this repo and copy `manifest.yml-dist` to `manifest.yml`.
 1. Edit `manifest.yml` to set the application name and hostname+domain path.
 1. Run `cf push`.
-1. If the misbehaving app on is a `.internal` domain, add a network policy enabling the proxy to reach it.
+1. Add a network policy enabling the proxy to reach the misbehaving app. For example:
   `cf add-network-policy subpath-strip-proxy --destination-app <appname>`
 
 --- 
