@@ -1,20 +1,24 @@
 # cf-subpath-proxy
 
-## Why this project
+## What's the problem?
 
-Sometimes applications aren't well-behaved when Cloud Foundry serves them from a route with a `--path`. One way to handle this situation is to use a proxy app as a front-end which strips the path from the request before it reaches the problem app. The misbehaving app will see all requests arriving via `/` instead of a subpath, avoiding broken behavior. You can use the [NGINX buildpack](https://docs.cloudfoundry.org/buildpacks/nginx/index.html) to implement such a proxy application, as demonstrated here.
+Sometimes applications are sensitive to the URLs used to make requests, and misbehave when Cloud Foundry serves them from a route with a `--path`, either not responding or trying to find their assets in an unrelated location.
 
-### That's too vague... What's an example of an app that misbehaves on a route with a path?
+### That's too vague... What's an example of an app that misbehaves?
 Running [R Shiny](https://shiny.rstudio.com/) apps on [Cloud Foundry](https://www.cloudfoundry.org/) works great thanks to the [R Buildpack](https://docs.cloudfoundry.org/buildpacks/r/index.html)... until you try to map your R Shiny app a route to with a `--path`! Then you'll see a `404 Not Found` message from the Shiny app. 
 
-If you provide a `uiPattern` parameter matching the path when you set up the app object in your R code, you'll see the app respond, but request JS and CSS assets from a `/shared` path. If you don't have another Shiny app at the root of the same hostname, those assets won't be found, and the app will appear broken.
+If you provide a `uiPattern` parameter matching the path when you set up the app object in your R code, you'll see the app respond, but request JS and CSS assets from a `/shared` path. Those assets won't be found, and the app will appear broken.
 
-Addressing the problem this way breaks two of the [12-factors](https://12factor.net/config) for well-behaved applications:
+This means R Shiny apps break two of the [12-factors](https://12factor.net/config) for well-behaved applications:
 
-* [Configuration should be separate from the app](https://12factor.net/config): Our app should not care about how requests are routed to it, or whether there's a path in the URL.
-* [Dependencies should be isolated](https://12factor.net/dependencies): Our app should not request JS and CSS from an unrelated app or location.
+* [Configuration should be separate from the app](https://12factor.net/config): A Shiny app should not care about how requests are routed to it, or whether there's a path in the URL.
+* [Dependencies should be isolated](https://12factor.net/dependencies): A Shiny app should not request JS and CSS from an unrelated app or location.
 
-In this example, we configure an `nginx-buildpack` proxy app to restore these two attributes to Shiny apps, referencing [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy).
+## What's the solution?
+
+We can restore these two factors by isolating the misbehaving application, then using a proxy app as a front-end to strip the path from the request before it reaches the problem app. The misbehaving app will see all requests arriving via `/` instead of a subpath, avoiding the broken behavior. 
+
+Here we use the [`nginx-buildpack`](https://docs.cloudfoundry.org/buildpacks/nginx/index.html) to implement such a proxy, referencing [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy).
 
 ## Using the proxy
 1. Map the misbehaving app to a route on an `.internal` domain, eg `<appname>.apps.internal`.
