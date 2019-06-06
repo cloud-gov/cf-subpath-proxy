@@ -7,7 +7,7 @@ applications:
   health-check-http-endpoint: /nginx_status
   buildpacks:
     - nginx_buildpack
-    
+
   # The NAMESERVER entered here is just to ensure that the nginx buildpack will successfully stage.
   # The code in .profile will overwrite the environment variable at application startup to ensure
   # that even apps on the "apps.internal" domain can be resolved.
@@ -18,10 +18,10 @@ applications:
     - route: example.appdomain
   # If you want another app at the root path, comment out the line above and comment in the lines below.
   # You must specify all subpaths you want to the proxy to handle!
-  # - route: example.appdomain/app1/
-  # - route: example.appdomain/app2/
-  # - route: example.appdomain/app3/
-  # - route: example.appdomain/app4/
-  # - route: example.appdomain/app5/
+  # - route: example.appdomain/app1
+  # - route: example.appdomain/app2
+  # - route: example.appdomain/app3
+  # - route: example.appdomain/app4
+  # - route: example.appdomain/app5
 
 
