@@ -1,4 +1,4 @@
-# subpath-strip-proxy
+# cf-subpath-proxy
 
 ## Why this project
 
