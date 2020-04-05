@@ -18,7 +18,7 @@ This means R Shiny apps break two of the [12-factors](https://12factor.net/confi
 
 We can restore these two factors by isolating the misbehaving application, then using a proxy app as a front-end to strip the path from the request before it reaches the problem app. The misbehaving app will see all requests arriving via `/` instead of a subpath, avoiding the broken behavior. 
 
-Here we use the [`nginx-buildpack`](https://docs.cloudfoundry.org/buildpacks/nginx/index.html) to implement such a proxy, referencing [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy).
+Here we use the [`php-buildpack`](https://docs.cloudfoundry.org/buildpacks/php/index.html) to implement such a proxy – by disabling PHP and taking advantage of the pre-installed Apache web server -, referencing [an example from the Shiny documentation](https://support.rstudio.com/hc/en-us/articles/213733868-Running-Shiny-Server-with-a-Proxy).
 
 ## Using the proxy
 1. Map the misbehaving app to a route on an `.internal` domain, eg `<appname>.apps.internal`.
